@@ -137,28 +137,8 @@ fn set_cgroup_cpuset(process_id: &str, cpuset: &str, memset: &str) -> Result<(),
     let path = format!("{}/cpuset/sandcastle/{}", CGROUP_ROOT, process_id);
     fs::create_dir_all(&path).unwrap();    
 
-    // let mut mems_file = fs::OpenOptions::new().append(true)
-    //                         .open(format!("{}/cpuset.mems", path))
-    //                         .expect("Failed to read cpuset.mems in cgroup");
-
-    // mems_file.write(memset.as_bytes()).expect("Failed to write cpuset.mems in cgroup");
-
     write_special(&format!("{}/cpuset.mems", path), &memset.to_string()).expect("mems failed");
-    
-    // let mut cpus_file = fs::OpenOptions::new().append(true)
-    //                         .open(format!("{}/cpuset.cpus", path))
-    //                         .expect("Failed to read cpuset.cpus in cgroup");
-
-    // cpus_file.write(cpuset.as_bytes()).expect("Failed to write cpuset.cpus in cgroup");
-
     write_special(&format!("{}/cpuset.cpus", path), &cpuset.to_string()).expect("cpus failed");
-
-    // let mut tasks_file = fs::OpenOptions::new().append(true)
-    //                         .open(format!("{}/tasks", path))
-    //                         .expect("Failed to read tasks in cgroup");
-
-    // tasks_file.write(process::id().to_string().as_bytes()).expect("Failed to write tasks in cgroup");
-
     write_special(&format!("{}/tasks", path), &process::id().to_string())?;
 
     Ok(())
